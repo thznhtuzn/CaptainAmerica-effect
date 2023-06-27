@@ -1,0 +1,22 @@
+Hiệu ứng áp dụng mặt nạ Captain America trên real-time camera
+
+Sử dụng thư viện Mediapipe
+3 phần
+video segmentaion (liner-regression model từ thư viện scikit)
+- sử dụng mô hình logistic regression để train việc áp dụng background trên camera
+- dùng ảnh chụp background có 1 màu(anhnen.jpg) và ảnh chụp người(anhtrain.jpg) làm bộ train
+- dùng 1 ảnh background khác(anhBG.jpg) áp dụng vào video, chèn vào những vị trí giống với background 1 màu
+áp dụng mặt nạ (mediapipe face-detection)
+- đọc file mặt nạ (capt.png)
+- dùng hàm multi_face_landmarks detect mặt và detect ra các điểm facial landmark
+- tính toán hệ số dist=(khoảng cách 2 mắt)
+- đặt mặt nạ vào vị trí mũi, kịch thước của mặt nạ sẽ to nhỏ theo khuôn mặt theo tỷ lệ dist*3.5
+áp dụng khiên (mediapipe hand-detection)
+- đọc file hình ảnh khiên (america.png)
+- dùng hàm multi_hands_landmarks để detect các điểm hand landmark từ tay xuất hiện trên camera
+- tính toán 1 hệ số palm = (khoảng cách từ ngón tay giữa đến cổ tay)
+- đặt vị trí khiên vào vị trí giữa bàn tay, kích thước dựa vào tỷ lệ palm*5
+kích hoạt  hiệu ứng
+- tính toán khoảng cách từ đầu ngón tay giữa đến 1 điểm ở trên camera(ở đây là điểm giữa mép bên phải)
+- khi đạt 1 giá trị trong khoảng 0<check<200 thì gán flag=1
+- nếu hàm điều kiện kiểm tra flag=1 thì áp dụng tất cả hiệu ứng lên camera
